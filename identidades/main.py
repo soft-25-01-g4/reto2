@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from views.identidades import IdentityView
+from controllers.identidades import IdentityView
 
 
 ''' -------------------- Main -------------------- '''
