@@ -26,7 +26,7 @@ WORKDIR /app
 # ----- ¡¡¡ AJUSTE CLAVE AQUÍ !!! -----
 # Copia el JAR ejecutable específico generado por Spring Boot desde la etapa 'builder'.
 # REEMPLAZA 'tu-aplicacion-springboot-0.0.1-SNAPSHOT.jar' con el nombre REAL de tu JAR ejecutable.
-COPY --from=builder /app/target/*.jar app.jar
+COPY --from=builder /app/target/ServicioConsulta-1.0-SNAPSHOT.jar app.jar
 
 # Exponemos el puerto que usa Spring Boot (por defecto es 8080, ajusta si lo cambiaste en application.properties/yml)
 EXPOSE 8080
