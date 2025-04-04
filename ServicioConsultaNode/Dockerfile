@@ -37,4 +37,4 @@ EXPOSE 5000
 
 # Comando para ejecutar la aplicación cuando el contenedor inicie
 # Usa el nombre de tu archivo principal (ej. server.js)
-CMD [ "node", "server.js" ]
+CMD [ "node", "service.js" ]
