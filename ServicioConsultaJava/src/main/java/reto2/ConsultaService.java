@@ -32,7 +32,7 @@ public class ConsultaService {
     }
 
     private void logToFile(Response respuesta) {
-        try (FileWriter writer = new FileWriter("data_servicio.txt", true)) {
+        try (FileWriter writer = new FileWriter("/opt/data/data_servicio.txt", true)) {
             String requestId = UUID.randomUUID().toString();
             String logLine = String.format("%s  %s  %s%n",
                     LocalDateTime.now(),

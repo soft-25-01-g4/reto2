@@ -20,11 +20,11 @@ def consulta():
         "cantidad": 50
     }
     
-    with open("log_python.txt", "a") as f:
+    with open("/opt/data/log_python.txt", "a") as f:
         f.write(f"{datetime.now().isoformat()}|{request_id}|{respuesta}\n")
     
   
     return jsonify(respuesta)
 
 if __name__ == '__main__':
-    app.run(port=8080)
+    app.run(host='0.0.0.0', port=8080)

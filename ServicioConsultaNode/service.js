@@ -29,7 +29,7 @@ app.post('/consulta', (req, res) => {
 
     const logEntry = `${new Date().toISOString()}|${request_id}|${JSON.stringify(respuesta)}\n`;
 
-    fs.appendFile("log_nodejs.txt", logEntry, (err) => {
+    fs.appendFile("/opt/data/log_nodejs.txt", logEntry, (err) => {
         if (err) {
             console.error("Error escribiendo en el log:", err);
         }
