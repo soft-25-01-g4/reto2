@@ -1,45 +1,40 @@
-# --- Etapa 1: Compilación (Builder) ---
-# Usamos una imagen de Go con Alpine específica para reproducibilidad
-FROM golang:1.24-alpine AS builder
+# --- Etapa Base ---
+# Usar una imagen oficial de Node.js. Alpine es más ligera.
+# Elige una versión LTS específica (ej. 20) en lugar de 'latest' para mayor estabilidad.
+FROM node:20-alpine AS base
 
-# Establecemos el directorio de trabajo
-WORKDIR /app
+# Establecer el directorio de trabajo en el contenedor
+WORKDIR /usr/src/app
 
-# Copiamos los archivos de módulos primero para aprovechar la caché de Docker
-COPY go.mod go.sum ./
-# Descargamos las dependencias
-RUN go mod download
+# --- Etapa de Dependencias ---
+# Copiar package.json y package-lock.json (si existe)
+# Copiar estos primero aprovecha el caché de Docker si no cambian.
+COPY package*.json ./
 
-# Copiamos el resto del código fuente de la aplicación
+# Instalar dependencias de producción
+# 'npm ci' es generalmente preferido en CI/builds para instalaciones limpias y rápidas usando package-lock.json
+# Si no tienes package-lock.json o prefieres 'npm install', puedes usar: RUN npm install --only=production
+RUN npm ci --only=production
+
+# --- Etapa de Ejecución ---
+# Reutilizar la imagen base para mantenerla ligera
+FROM node:20-alpine
+
+WORKDIR /usr/src/app
+
+# Copiar las dependencias instaladas desde la etapa de dependencias
+COPY --from=base /usr/src/app/node_modules ./node_modules
+
+# Copiar el código de la aplicación
 COPY . .
 
-# Compilamos la aplicación.
-# -ldflags="-w -s" reduce el tamaño del binario eliminando información de debug y símbolos.
-# CGO_ENABLED=0 intenta crear un binario estático (sin dependencias C), ideal para imágenes mínimas.
-RUN CGO_ENABLED=0 go build -ldflags="-w -s" -o /app/router .
-
-# --- Etapa 2: Imagen Final (Runtime) ---
-# Usamos una imagen base mínima de Alpine. Es pequeña y común.
-FROM alpine:latest
-
-# Creamos un grupo y usuario no-root. OpenShift asignará un UID arbitrario,
-# pero esta es una buena práctica de seguridad y permite permisos consistentes.
+# (Opcional pero recomendado) Crear un usuario no-root para ejecutar la aplicación
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
-
-# Establecemos el directorio de trabajo
-WORKDIR /app
-
-# Copiamos únicamente el binario compilado desde la etapa 'builder'
-# Establecemos el propietario del binario al usuario/grupo no-root
-COPY --from=builder --chown=appuser:appgroup /app/router .
-
-# Exponemos el puerto en el que la aplicación escuchará DENTRO del contenedor.
-# ¡ASEGÚRATE de que tu main.go usa router.Run(":8080")!
-EXPOSE 8080
-
-# Cambiamos al usuario no-root para ejecutar la aplicación
 USER appuser
 
-# Comando para ejecutar la aplicación al iniciar el contenedor.
-# Las variables CONSULTAS_URL e IDENTIDADES_URL deben ser inyectadas por OpenShift.
-CMD ["./router"]
+# Exponer el puerto en el que la aplicación corre (según tu código, es 5000)
+EXPOSE 5000
+
+# Comando para ejecutar la aplicación cuando el contenedor inicie
+# Usa el nombre de tu archivo principal (ej. server.js)
+CMD [ "node", "service.js" ]
