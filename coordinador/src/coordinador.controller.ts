@@ -10,17 +10,17 @@ export class CoordinadorController {
   constructor(private readonly coordinadorService: CoordinadorService) {}
 
   @Post()
-  consultas(
+  async consultas(
     @Res() response: Response,
     @Body() consultaRequest: ConsultaRequest,
-  ): Response {
+  ) {
     if (!consultaRequest) {
       const error: ConsultaError = {
         message: 'Body is required',
       };
       return response.status(HttpStatus.BAD_REQUEST).send(error);
     }
-    const consultaResponse: ConsultaResponse =
+    const consultaResponse: any = await
       this.coordinadorService.consultas(consultaRequest);
     return response.status(HttpStatus.OK).send(consultaResponse);
   }
