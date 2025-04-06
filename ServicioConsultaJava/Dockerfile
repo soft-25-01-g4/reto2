@@ -23,6 +23,9 @@ FROM eclipse-temurin:21-jre-jammy
 
 WORKDIR /app
 
+RUN groupadd -g 1001 appgroup && useradd -u 1001 -g appgroup -m -s /bin/bash appuser
+USER appuser
+
 # ----- ¡¡¡ AJUSTE CLAVE AQUÍ !!! -----
 # Copia el JAR ejecutable específico generado por Spring Boot desde la etapa 'builder'.
 # REEMPLAZA 'tu-aplicacion-springboot-0.0.1-SNAPSHOT.jar' con el nombre REAL de tu JAR ejecutable.
