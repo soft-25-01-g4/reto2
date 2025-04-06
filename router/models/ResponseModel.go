@@ -1,6 +1,8 @@
 package models
 
 type Response struct {
-	ID      string `json:"id"`
-	MESSAGE string `json:"message"`
+	id_detalle_pedido int `json:"id_detalle_pedido"`
+	id_pedido         int `json:"id_pedido"`
+	id_inventario     int `json:"id_inventario"`
+	cantidad          int `json:"cantidad"`
 }
