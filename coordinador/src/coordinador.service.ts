@@ -10,8 +10,9 @@ import * as path from 'path';
 export class CoordinadorService {
   private urls = [
    
-  process.env.SERVICE_URL_1 || 'http://localhost:5000/consulta',
-  process.env.SERVICE_URL_2 || 'http://localhost:8080/consulta',
+    process.env.SERVICE_URL_1 || 'http://localhost:3001/consulta',
+    process.env.SERVICE_URL_2 || 'http://localhost:3002/consulta',
+    process.env.SERVICE_URL_3 || 'http://localhost:3003/consulta',
   ];
   constructor(private readonly httpService: HttpService) {}
 
