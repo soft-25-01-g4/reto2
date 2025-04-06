@@ -4,8 +4,8 @@ import { ConsultaRequest } from './consulta.request.model';
 import { ConsultaError } from './request.error.model';
 import { firstValueFrom } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
-
-
+import * as fs from 'fs';
+import * as path from 'path';
 @Injectable()
 export class CoordinadorService {
   private urls = [
@@ -44,6 +44,8 @@ export class CoordinadorService {
       successfulResponses.every(r =>
         this.compareConsultaResponses(r.data, successfulResponses[0].data)
       );
+    this.logToFile(`match: ${allMatch}, response 1: ${successfulResponses[0].data.cantidad} , response 2: ${successfulResponses[1].data.cantidad}  `);
+
     return {
       allMatch,
       responses,
@@ -58,6 +60,23 @@ export class CoordinadorService {
       a.cantidad === b.cantidad
     );
   }
+
+ private  logToFile(message: string) {
+  const dirPath = '/opt/data'; // absolute path at root
+  const filePath = path.join(dirPath, 'coordinador.txt');
+  const timestamp = new Date().toISOString();
+  const fullMessage = `[${timestamp}] ${message}\n`;
+
+  try {
+    fs.mkdirSync(dirPath, { recursive: true }); // ✅ Create the folder if it doesn't exist
+    fs.appendFileSync(filePath, fullMessage);   // ✅ Write log to file
+  } catch (err) {
+    console.error('Failed to write log:', err);
+  }
+}
+   
+ 
+  
 
   private async forwardPost(url: string, data: any): Promise<any> {
     const response = await firstValueFrom(this.httpService.post(url, data));
