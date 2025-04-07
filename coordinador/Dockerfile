@@ -48,8 +48,6 @@ COPY --from=builder --chown=nestjs:nodejs /usr/src/app/node_modules ./node_modul
 COPY --from=builder --chown=nestjs:nodejs /usr/src/app/package*.json ./
 
 # Cambiar al usuario no-root
-
-RUN groupadd -g 1001 appgroup && useradd -u 1001 -g appgroup -m -s /bin/bash nestjs
 USER nestjs
 
 # Exponer el puerto en el que la aplicación escucha (según tu main.ts)
