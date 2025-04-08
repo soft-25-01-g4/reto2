@@ -45,7 +45,7 @@ export class CoordinadorService {
       successfulResponses.every(r =>
         this.compareConsultaResponses(r.data, successfulResponses[0].data)
       );
-    this.logToFile(`match: ${allMatch}, response 1: ${successfulResponses[0].data.cantidad} , response 2: ${successfulResponses[1].data.cantidad}  `);
+    this.logToFile(`match: ${allMatch}, response 1: ${successfulResponses[0].data.cantidad} , response 2: ${successfulResponses[1].data.cantidad}, , response 3: ${successfulResponses[2].data.cantidad}  `);
 
     return {
       allMatch,
@@ -55,10 +55,10 @@ export class CoordinadorService {
 
   private compareConsultaResponses(a: ConsultaResponse, b: ConsultaResponse): boolean {
     return (
-      a.id_detalle_pedido === b.id_detalle_pedido &&
-      a.id_pedido === b.id_pedido &&
-      a.id_inventario === b.id_inventario &&
-      a.cantidad === b.cantidad
+      a.id_detalle_pedido.toString() === b.id_detalle_pedido.toString() &&
+      a.id_pedido.toString() === b.id_pedido.toString() &&
+      a.id_inventario.toString() === b.id_inventario.toString() &&
+      a.cantidad.toString() === b.cantidad.toString()
     );
   }
 
