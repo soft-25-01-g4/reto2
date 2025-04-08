@@ -10,9 +10,9 @@ import * as path from 'path';
 export class CoordinadorService {
   private urls = [
    
-    process.env.SERVICE_URL_1 || 'http://localhost:3001/consulta',
-    process.env.SERVICE_URL_2 || 'http://localhost:3002/consulta',
-    process.env.SERVICE_URL_3 || 'http://localhost:3003/consulta',
+    process.env.SERVICE_URL_1 || 'https://consultas-js-juank1400-dev.apps.rm3.7wse.p1.openshiftapps.com/consulta',
+    process.env.SERVICE_URL_2 || 'https://consultas-jv-juank1400-dev.apps.rm3.7wse.p1.openshiftapps.com/consulta',
+    process.env.SERVICE_URL_3 || 'https://consultas-py-juank1400-dev.apps.rm3.7wse.p1.openshiftapps.com/consulta',
   ];
   constructor(private readonly httpService: HttpService) {}
 
@@ -28,6 +28,7 @@ export class CoordinadorService {
     const results = await Promise.allSettled(
       this.urls.map((url) => this.forwardPost(url, consultaRequest)),
     );
+
     console.log('Results:', results);
     const responses = results.map((res, i) => ({
       url: this.urls[i],
@@ -45,7 +46,8 @@ export class CoordinadorService {
       successfulResponses.every(r =>
         this.compareConsultaResponses(r.data, successfulResponses[0].data)
       );
-    this.logToFile(`match: ${allMatch}, response 1: ${successfulResponses[0].data.cantidad} , response 2: ${successfulResponses[1].data.cantidad}  `);
+    
+    this.logToFile(`match: ${allMatch}, id_pedido: ${successfulResponses[0].data.id_pedido}, response 1: ${successfulResponses[0].data.cantidad} , response 2: ${successfulResponses[1].data.cantidad}   , response 3: ${successfulResponses[2].data.cantidad}  `);
 
     return {
       allMatch,
@@ -55,10 +57,10 @@ export class CoordinadorService {
 
   private compareConsultaResponses(a: ConsultaResponse, b: ConsultaResponse): boolean {
     return (
-      a.id_detalle_pedido === b.id_detalle_pedido &&
-      a.id_pedido === b.id_pedido &&
-      a.id_inventario === b.id_inventario &&
-      a.cantidad === b.cantidad
+      a.id_detalle_pedido.toString() === b.id_detalle_pedido.toString() &&
+      a.id_pedido.toString() === b.id_pedido.toString() &&
+      a.id_inventario.toString() === b.id_inventario.toString() &&
+      a.cantidad.toString() === b.cantidad.toString()
     );
   }
 
@@ -75,9 +77,6 @@ export class CoordinadorService {
     console.error('Failed to write log:', err);
   }
 }
-   
- 
-  
 
   private async forwardPost(url: string, data: any): Promise<any> {
     const response = await firstValueFrom(this.httpService.post(url, data));
