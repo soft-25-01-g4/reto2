@@ -28,8 +28,6 @@ COPY --from=base /usr/src/app/node_modules ./node_modules
 # Copiar el código de la aplicación
 COPY . .
 
-# (Opcional pero recomendado) Crear un usuario no-root para ejecutar la aplicación
-RUN groupadd -g 1001 appgroup && useradd -u 1001 -g appgroup -m -s /bin/bash appuser
 USER appuser
 
 # Exponer el puerto en el que la aplicación corre (según tu código, es 5000)
