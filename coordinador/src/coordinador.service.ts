@@ -47,7 +47,7 @@ export class CoordinadorService {
         this.compareConsultaResponses(r.data, successfulResponses[0].data)
       );
     
-    this.logToFile(`match: ${allMatch}, id_pedido: ${successfulResponses[0].data.id_pedido}, response 1: ${successfulResponses[0].data.cantidad} , response 2: ${successfulResponses[1].data.cantidad}   , response 3: ${successfulResponses[2].data.cantidad}  `);
+    this.logToFile(`match: ${allMatch}, id_pedido: ${successfulResponses[0].data.id_pedido}, response 1: ${successfulResponses[0].data.cantidad} , response 2: ${successfulResponses[1].data.cantidad}   , response 3: ${successfulResponses[2].data.cantidad} `);
 
     return {
       allMatch,
