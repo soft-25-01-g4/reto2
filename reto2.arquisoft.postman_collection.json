@@ -1,0 +1,293 @@
+{
+	"info": {
+		"_postman_id": "bf0b0b79-82a9-422a-92ad-8903bb7d93aa",
+		"name": "reto 2 arquisoft",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13633695"
+	},
+	"item": [
+		{
+			"name": "LoadTesters",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function randomString(minValue, maxValue, dataSet = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ') {\r",
+							"    // TO-DO escribir sus propias demos\r",
+							"    if (!minValue) {\r",
+							"        minValue = 20;\r",
+							"        maxValue = 20;\r",
+							"    }\r",
+							"\r",
+							"    if (!maxValue) {\r",
+							"        maxValue = minValue;\r",
+							"    }\r",
+							"\r",
+							"    let length = _.random(minValue, maxValue),\r",
+							"        randomString = \"\";\r",
+							"\r",
+							"    for (let i = 0; i < length; i++)\r",
+							"        randomString += dataSet.charAt(Math.floor(Math.random() * dataSet.length));\r",
+							"    return randomString;\r",
+							"}\r",
+							"\r",
+							"function getRandomNumber() {\r",
+							"  return (Math.floor(Math.random() * 99) + 1).toString();\r",
+							"}\r",
+							"function getRandomTimestamp() {\r",
+							"    const start = new Date(2025, 0, 1).getTime();\r",
+							"    const end = new Date(2025, 11, 31).getTime();\r",
+							"    const randomTime = new Date(start + Math.random() * (end - start));\r",
+							"    return randomTime.toISOString();\r",
+							"}\r",
+							"pm.variables.set('randomTime', getRandomTimestamp());\r",
+							"pm.variables.set('randomString', randomString());\r",
+							"pm.variables.set('randomNumber1', getRandomNumber());\r",
+							"pm.variables.set('randomNumber2', getRandomNumber());\r",
+							"pm.variables.set('randomNumber3', getRandomNumber());"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "tk1",
+						"type": "text"
+					},
+					{
+						"key": "content-type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "  {  \"id_detalle_pedido\":  \"{{randomNumber1}}\",\r\n      \"id_pedido\": \"{{randomNumber2}}\",\r\n      \"id_inventario\": \"{{randomNumber3}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://coordinador-juank1400-dev.apps.rm3.7wse.p1.openshiftapps.com/consultas",
+					"protocol": "https",
+					"host": [
+						"coordinador-juank1400-dev",
+						"apps",
+						"rm3",
+						"7wse",
+						"p1",
+						"openshiftapps",
+						"com"
+					],
+					"path": [
+						"consultas"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/consultas",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "tk1",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"id_detalle_pedido\": \"120\",\n  \"id_pedido\": \"130\",\n  \"id_inventario\": \"180\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/consultas",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"consultas"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://router-juank1400-dev.apps.rm3.7wse.p1.openshiftapps.com/consultas",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "tk1",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"id_detalle_pedido\": 120,\n  \"id_pedido\": 130,\n  \"id_inventario\": 180\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://router-juank1400-dev.apps.rm3.7wse.p1.openshiftapps.com/consultas",
+					"protocol": "https",
+					"host": [
+						"router-juank1400-dev",
+						"apps",
+						"rm3",
+						"7wse",
+						"p1",
+						"openshiftapps",
+						"com"
+					],
+					"path": [
+						"consultas"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/consultas",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "tk1",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"id_detalle_pedido\": 120,\n  \"id_pedido\": 130,\n  \"id_inventario\": 180\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/consultas",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"consultas"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://coordinador-juank1400-dev.apps.rm3.7wse.p1.openshiftapps.com/consultas",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "tk1",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"id_detalle_pedido\": 120,\n  \"id_pedido\": 130,\n  \"id_inventario\": 180\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://coordinador-juank1400-dev.apps.rm3.7wse.p1.openshiftapps.com/consultas",
+					"protocol": "https",
+					"host": [
+						"coordinador-juank1400-dev",
+						"apps",
+						"rm3",
+						"7wse",
+						"p1",
+						"openshiftapps",
+						"com"
+					],
+					"path": [
+						"consultas"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
