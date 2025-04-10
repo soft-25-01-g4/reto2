@@ -21,66 +21,87 @@ export class CoordinadorService {
   ) {
     if (consultaRequest === undefined) {
       return {
-        message: 'No se piuede procesar, el cuerpo del request es requerido',
+        message: 'No se puede procesar, el cuerpo del request es requerido',
       };
     }
-  
     const results = await Promise.allSettled(
       this.urls.map((url) => this.forwardPost(url, consultaRequest)),
     );
 
-    console.log('Results:', results);
-    const responses = results.map((res, i) => ({
-      url: this.urls[i],
-      success: res.status === 'fulfilled',
-      data: res.status === 'fulfilled' ? res.value : res.reason.message,
-    }));
+    console.dir(results, { depth: null });
+    const validResponses: ConsultaResponse[] = results
+      .filter(
+        (r): r is PromiseFulfilledResult<{ status: number; data: ConsultaResponse }> =>
+          r.status === 'fulfilled' && r.value.status === 200
+      )
+      .map((r) => r.value.data);
 
-    const successfulResponses = responses.filter(r => r.success) as {
-      url: string;
-      success: true;
-      data: ConsultaResponse;
-    }[];
+    // Con las respuestas de los servicios invocar el voting
+    const resultadoVoting = this.voting(validResponses);
     
-    const allMatch =
-      successfulResponses.every(r =>
-        this.compareConsultaResponses(r.data, successfulResponses[0].data)
-      );
-    
-    this.logToFile(`match: ${allMatch}, id_pedido: ${successfulResponses[0].data.id_pedido}, response 1: ${successfulResponses[0].data.cantidad} , response 2: ${successfulResponses[1].data.cantidad}   , response 3: ${successfulResponses[2].data.cantidad} `);
+    this.logToFile( `match: ${resultadoVoting.match}, id_pedido: ${resultadoVoting.data.id_pedido},` +
+      ` response 1: ${JSON.stringify(validResponses[0])},` +
+      ` response 2: ${JSON.stringify(validResponses[1])},` +
+      ` response 3: ${JSON.stringify(validResponses[2])}`);
 
-    if(allMatch){  
-      return successfulResponses[1].data
-    }else{
-      return successfulResponses[1].data
-    }
+    return {
+      match: resultadoVoting.match,
+      data: resultadoVoting.data,
+    };
   }
 
-  private compareConsultaResponses(a: ConsultaResponse, b: ConsultaResponse): boolean {
-    return (
-      a.id_detalle_pedido.toString() === b.id_detalle_pedido.toString() &&
-      a.id_pedido.toString() === b.id_pedido.toString() &&
-      a.id_inventario.toString() === b.id_inventario.toString() &&
-      a.cantidad.toString() === b.cantidad.toString()
-    );
+  private voting(responses: ConsultaResponse[]): {
+    match: boolean;
+    data: ConsultaResponse;
+  } {
+
+    const contador = new Map<string, { count: number; data: ConsultaResponse }>();
+    
+    // Contar votos por cada objeto
+    for (const r of responses) {
+      const key = r.cantidad.toString();
+      if (!contador.has(key)) {
+        contador.set(key, { count: 1, data: r });
+      } else {
+        contador.get(key)!.count++;
+      }
+    }
+  
+    // Buscar el objeto más votado
+    let ganador: { count: number; data: ConsultaResponse } | null = null;
+    for (const item of contador.values()) {
+      if (!ganador || item.count > ganador.count) {
+        ganador = item;
+      }
+    }
+  
+    const match = responses.length === (ganador?.count || 0);
+    return {
+      match,
+      data: ganador!.data
+    };
   }
 
  private  logToFile(message: string) {
-  const dirPath = '/opt/data'; // absolute path at root
+  const dirPath = '/opt/data';
+  console.log(dirPath)
   const filePath = path.join(dirPath, 'coordinador.txt');
   const timestamp = new Date().toISOString();
   const fullMessage = `[${timestamp}] ${message}\n`;
 
   try {
-    fs.mkdirSync(dirPath, { recursive: true }); // ✅ Create the folder if it doesn't exist
-    fs.appendFileSync(filePath, fullMessage);   // ✅ Write log to file
+    fs.mkdirSync(dirPath, { recursive: true }); 
+    fs.appendFileSync(filePath, fullMessage);   
   } catch (err) {
     console.error('Failed to write log:', err);
   }
 }
 
-  private async forwardPost(url: string, data: any): Promise<any> {
-    const response = await firstValueFrom(this.httpService.post(url, data));
-    return response.data;
-  }
+private async forwardPost(url: string, data: any): Promise<{ status: number; data: ConsultaResponse }> {
+  const response = await firstValueFrom(this.httpService.post(url, data));
+  return {
+    status: response.status, 
+    data: response.data       
+  };
+}
 }
