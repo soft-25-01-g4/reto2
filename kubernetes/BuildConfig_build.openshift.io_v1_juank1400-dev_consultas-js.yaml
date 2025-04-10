@@ -1,0 +1,44 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  annotations:
+    app.openshift.io/vcs-ref: ""
+    app.openshift.io/vcs-uri: https://github.com/soft-25-01-g4/reto2.git
+    openshift.io/generated-by: OpenShiftWebConsole
+  labels:
+    app: consultas-js
+    app.kubernetes.io/component: consultas-js
+    app.kubernetes.io/instance: consultas-js
+    app.kubernetes.io/name: consultas-js
+    app.kubernetes.io/part-of: consultas
+  name: consultas-js
+spec:
+  failedBuildsHistoryLimit: 5
+  nodeSelector: null
+  output:
+    to:
+      kind: ImageStreamTag
+      name: consultas-js:latest
+  postCommit: {}
+  resources: {}
+  runPolicy: Serial
+  source:
+    contextDir: /ServicioConsultaNode
+    git:
+      uri: https://github.com/soft-25-01-g4/reto2.git
+    type: Git
+  strategy:
+    dockerStrategy:
+      dockerfilePath: Dockerfile
+    type: Docker
+  successfulBuildsHistoryLimit: 5
+  triggers:
+  - generic:
+      secretReference:
+        name: consultas-js-generic-webhook-secret
+    type: Generic
+  - github:
+      secretReference:
+        name: consultas-js-github-webhook-secret
+    type: GitHub
+  - type: ConfigChange

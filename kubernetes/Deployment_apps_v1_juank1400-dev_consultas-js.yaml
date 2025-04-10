@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    alpha.image.policy.openshift.io/resolve-names: '*'
+    app.openshift.io/route-disabled: "false"
+    app.openshift.io/vcs-ref: ""
+    app.openshift.io/vcs-uri: https://github.com/soft-25-01-g4/reto2.git
+    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"consultas-js:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"consultas-js\")].image","pause":""}]'
+    openshift.io/generated-by: OpenShiftWebConsole
+  labels:
+    app: consultas-js
+    app.kubernetes.io/component: consultas-js
+    app.kubernetes.io/instance: consultas-js
+    app.kubernetes.io/name: consultas-js
+    app.kubernetes.io/part-of: consultas
+  name: consultas-js
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 0
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: consultas-js
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: consultas-js
+        deployment: consultas-js
+    spec:
+      containers:
+      - image: image-registry.openshift-image-registry.svc:5000/juank1400-dev/consultas-js@sha256:99463845cc98d640b249531fddabaa3e676912ee47c021887950ccc09b00a7ee
+        imagePullPolicy: Always
+        name: consultas-js
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        - containerPort: 5000
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /opt/data/
+          name: votingdata
+          subPath: js
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext:
+        fsGroup: 1012500000
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: votingdata
+        persistentVolumeClaim:
+          claimName: votingdata

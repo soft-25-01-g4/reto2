@@ -1,0 +1,45 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  annotations:
+    app.openshift.io/connects-to: '[{"apiVersion":"apps/v1","kind":"Deployment","name":"consultas-jv"}]'
+    app.openshift.io/vcs-ref: ""
+    app.openshift.io/vcs-uri: https://github.com/soft-25-01-g4/reto2.git
+    openshift.io/generated-by: OpenShiftWebConsole
+  labels:
+    app: coordinador
+    app.kubernetes.io/component: coordinador
+    app.kubernetes.io/instance: coordinador
+    app.kubernetes.io/name: coordinador
+    app.kubernetes.io/part-of: consultas
+  name: coordinador
+spec:
+  failedBuildsHistoryLimit: 5
+  nodeSelector: null
+  output:
+    to:
+      kind: ImageStreamTag
+      name: coordinador:latest
+  postCommit: {}
+  resources: {}
+  runPolicy: Serial
+  source:
+    contextDir: /coordinador
+    git:
+      uri: https://github.com/soft-25-01-g4/reto2.git
+    type: Git
+  strategy:
+    dockerStrategy:
+      dockerfilePath: Dockerfile
+    type: Docker
+  successfulBuildsHistoryLimit: 5
+  triggers:
+  - generic:
+      secretReference:
+        name: coordinador-generic-webhook-secret
+    type: Generic
+  - github:
+      secretReference:
+        name: coordinador-github-webhook-secret
+    type: GitHub
+  - type: ConfigChange

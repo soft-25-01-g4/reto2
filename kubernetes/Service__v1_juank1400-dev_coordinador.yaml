@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    app.openshift.io/connects-to: '[{"apiVersion":"apps/v1","kind":"Deployment","name":"consultas-jv"}]'
+    app.openshift.io/vcs-ref: ""
+    app.openshift.io/vcs-uri: https://github.com/soft-25-01-g4/reto2.git
+    openshift.io/generated-by: OpenShiftWebConsole
+  labels:
+    app: coordinador
+    app.kubernetes.io/component: coordinador
+    app.kubernetes.io/instance: coordinador
+    app.kubernetes.io/name: coordinador
+    app.kubernetes.io/part-of: consultas
+  name: coordinador
+spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: 3000-tcp
+    port: 3000
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    app: coordinador
+    deployment: coordinador
+  sessionAffinity: None
+  type: ClusterIP

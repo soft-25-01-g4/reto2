@@ -1,0 +1,44 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  annotations:
+    app.openshift.io/vcs-ref: ""
+    app.openshift.io/vcs-uri: https://github.com/soft-25-01-g4/reto2.git
+    openshift.io/generated-by: OpenShiftWebConsole
+  labels:
+    app: identidades
+    app.kubernetes.io/component: identidades
+    app.kubernetes.io/instance: identidades
+    app.kubernetes.io/name: identidades
+    app.kubernetes.io/part-of: reto-2
+  name: identidades
+spec:
+  failedBuildsHistoryLimit: 5
+  nodeSelector: null
+  output:
+    to:
+      kind: ImageStreamTag
+      name: identidades:latest
+  postCommit: {}
+  resources: {}
+  runPolicy: Serial
+  source:
+    contextDir: /identidades
+    git:
+      uri: https://github.com/soft-25-01-g4/reto2.git
+    type: Git
+  strategy:
+    dockerStrategy:
+      dockerfilePath: Dockerfile
+    type: Docker
+  successfulBuildsHistoryLimit: 5
+  triggers:
+  - generic:
+      secretReference:
+        name: identidades-generic-webhook-secret
+    type: Generic
+  - github:
+      secretReference:
+        name: identidades-github-webhook-secret
+    type: GitHub
+  - type: ConfigChange

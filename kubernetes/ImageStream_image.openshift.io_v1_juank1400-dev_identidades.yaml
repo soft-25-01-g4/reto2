@@ -1,0 +1,17 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  annotations:
+    app.openshift.io/vcs-ref: ""
+    app.openshift.io/vcs-uri: https://github.com/soft-25-01-g4/reto2.git
+    openshift.io/generated-by: OpenShiftWebConsole
+  labels:
+    app: identidades
+    app.kubernetes.io/component: identidades
+    app.kubernetes.io/instance: identidades
+    app.kubernetes.io/name: identidades
+    app.kubernetes.io/part-of: reto-2
+  name: identidades
+spec:
+  lookupPolicy:
+    local: false

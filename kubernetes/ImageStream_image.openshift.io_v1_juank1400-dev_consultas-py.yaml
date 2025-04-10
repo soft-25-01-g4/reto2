@@ -1,0 +1,19 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  annotations:
+    app.openshift.io/vcs-ref: ""
+    app.openshift.io/vcs-uri: https://github.com/soft-25-01-g4/reto2.git
+    openshift.io/generated-by: OpenShiftWebConsole
+  labels:
+    app: consultas-py
+    app.kubernetes.io/component: consultas-py
+    app.kubernetes.io/instance: consultas-py
+    app.kubernetes.io/name: consultas-py
+    app.kubernetes.io/part-of: consultas
+    app.openshift.io/runtime: python
+    app.openshift.io/runtime-version: 3.12-ubi8
+  name: consultas-py
+spec:
+  lookupPolicy:
+    local: false

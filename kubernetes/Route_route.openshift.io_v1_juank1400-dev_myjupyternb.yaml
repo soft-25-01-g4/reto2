@@ -1,0 +1,26 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    app.openshift.io/vcs-ref: ""
+    app.openshift.io/vcs-uri: https://github.com/juank1400/myjupyternb.git
+    openshift.io/generated-by: OpenShiftWebConsole
+    openshift.io/host.generated: "true"
+  labels:
+    app: myjupyternb
+    app.kubernetes.io/component: myjupyternb
+    app.kubernetes.io/instance: myjupyternb
+    app.kubernetes.io/name: myjupyternb
+    app.kubernetes.io/part-of: Notebook
+  name: myjupyternb
+spec:
+  port:
+    targetPort: 8888-tcp
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+  to:
+    kind: Service
+    name: myjupyternb
+    weight: 100
+  wildcardPolicy: None

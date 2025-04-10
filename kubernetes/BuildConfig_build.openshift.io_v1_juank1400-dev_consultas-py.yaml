@@ -1,0 +1,51 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  annotations:
+    app.openshift.io/vcs-ref: ""
+    app.openshift.io/vcs-uri: https://github.com/soft-25-01-g4/reto2.git
+    openshift.io/generated-by: OpenShiftWebConsole
+  labels:
+    app: consultas-py
+    app.kubernetes.io/component: consultas-py
+    app.kubernetes.io/instance: consultas-py
+    app.kubernetes.io/name: consultas-py
+    app.kubernetes.io/part-of: consultas
+    app.openshift.io/runtime: python
+    app.openshift.io/runtime-version: 3.12-ubi8
+  name: consultas-py
+spec:
+  failedBuildsHistoryLimit: 5
+  nodeSelector: null
+  output:
+    to:
+      kind: ImageStreamTag
+      name: consultas-py:latest
+  postCommit: {}
+  resources: {}
+  runPolicy: Serial
+  source:
+    contextDir: /ServicioConsultaPython
+    git:
+      uri: https://github.com/soft-25-01-g4/reto2.git
+    type: Git
+  strategy:
+    sourceStrategy:
+      from:
+        kind: ImageStreamTag
+        name: python:3.12-ubi8
+        namespace: openshift
+    type: Source
+  successfulBuildsHistoryLimit: 5
+  triggers:
+  - generic:
+      secretReference:
+        name: consultas-py-generic-webhook-secret
+    type: Generic
+  - github:
+      secretReference:
+        name: consultas-py-github-webhook-secret
+    type: GitHub
+  - imageChange: {}
+    type: ImageChange
+  - type: ConfigChange

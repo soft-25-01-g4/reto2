@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    alpha.image.policy.openshift.io/resolve-names: '*'
+    app.openshift.io/connects-to: '[{"apiVersion":"apps/v1","kind":"Deployment","name":"identidades"},{"apiVersion":"apps/v1","kind":"Deployment","name":"coordinador"}]'
+    app.openshift.io/route-disabled: "false"
+    app.openshift.io/vcs-ref: ""
+    app.openshift.io/vcs-uri: https://github.com/soft-25-01-g4/reto2.git
+    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"router:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"router\")].image","pause":""}]'
+    openshift.io/generated-by: OpenShiftWebConsole
+  labels:
+    app: router
+    app.kubernetes.io/component: router
+    app.kubernetes.io/instance: router
+    app.kubernetes.io/name: router
+    app.kubernetes.io/part-of: reto-2
+  name: router
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 0
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: router
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: router
+        deployment: router
+    spec:
+      containers:
+      - env:
+        - name: CONSULTAS_URL
+          value: http://coordinador:3000/consultas
+        - name: IDENTIDADES_URL
+          value: http://identidades:8080/identidades/validar
+        image: image-registry.openshift-image-registry.svc:5000/juank1400-dev/router@sha256:e5f26c2c17b1617a3834d0e28c3a6e6bbf5bad96efbe40fd79aef091deeb17df
+        imagePullPolicy: Always
+        name: router
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30

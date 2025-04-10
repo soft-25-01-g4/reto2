@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    app.openshift.io/vcs-ref: ""
+    app.openshift.io/vcs-uri: https://github.com/juank1400/myjupyternb.git
+    openshift.io/generated-by: OpenShiftWebConsole
+  labels:
+    app: myjupyternb
+    app.kubernetes.io/component: myjupyternb
+    app.kubernetes.io/instance: myjupyternb
+    app.kubernetes.io/name: myjupyternb
+    app.kubernetes.io/part-of: Notebook
+  name: myjupyternb
+spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: 8888-tcp
+    port: 8888
+    protocol: TCP
+    targetPort: 8888
+  selector:
+    app: myjupyternb
+    deployment: myjupyternb
+  sessionAffinity: None
+  type: ClusterIP

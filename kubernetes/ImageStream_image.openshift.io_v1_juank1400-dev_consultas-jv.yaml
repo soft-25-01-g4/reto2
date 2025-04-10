@@ -1,0 +1,17 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  annotations:
+    app.openshift.io/vcs-ref: ""
+    app.openshift.io/vcs-uri: https://github.com/soft-25-01-g4/reto2.git
+    openshift.io/generated-by: OpenShiftWebConsole
+  labels:
+    app: consultas-jv
+    app.kubernetes.io/component: consultas-jv
+    app.kubernetes.io/instance: consultas-jv
+    app.kubernetes.io/name: consultas-jv
+    app.kubernetes.io/part-of: consultas
+  name: consultas-jv
+spec:
+  lookupPolicy:
+    local: false

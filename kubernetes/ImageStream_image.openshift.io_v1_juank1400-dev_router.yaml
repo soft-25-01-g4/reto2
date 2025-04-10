@@ -1,0 +1,17 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  annotations:
+    app.openshift.io/vcs-ref: ""
+    app.openshift.io/vcs-uri: https://github.com/soft-25-01-g4/reto2.git
+    openshift.io/generated-by: OpenShiftWebConsole
+  labels:
+    app: router
+    app.kubernetes.io/component: router
+    app.kubernetes.io/instance: router
+    app.kubernetes.io/name: router
+    app.kubernetes.io/part-of: reto-2
+  name: router
+spec:
+  lookupPolicy:
+    local: false
