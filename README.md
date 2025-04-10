@@ -4,20 +4,20 @@ This project build a experiment to demostrate the acomplishment of the ASR of Av
 
 ## Components
 
-### 1.  Router Service [cite: 3]
+### 1.  Router Service
 
-* **Description:** A Go-based service (`router/main.go`) that acts as a router. It likely receives external requests, validates them, and forwards them to appropriate internal services[cite: 3].
+* **Description:** A Go-based service (`router/main.go`) that acts as a router. It likely receives external requests, validates them agains Identity services, and forwards them to appropriate internal services[cite: 3].
 * **Key Features:**
-    * Request validation[cite: 3].
-    * Request forwarding[cite: 3].
-    * Uses Gin framework[cite: 3].
+    * Request validation.
+    * Request forwarding.
+    * Uses Gin framework.
     * Configuration via environment variables (`CONSULTAS_URL`, `IDENTIDADES_URL`).
 
 ### 2.  Identity Service
 
 * **Description:** A Python/FastAPI service (`identidades/main.py`) responsible for validating credentials (likely tokens)[cite: 3].
 * **Key Features:**
-    * Token validation against a whitelist (`whitelist.json`).
+    * Token validation against a whitelist in order to simplify the experiment (`whitelist.json`).
     * API endpoints for validation (`/identidades/validar`).
 
 ### 3.  Consulta Services
